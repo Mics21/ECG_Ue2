@@ -1,5 +1,6 @@
 #include "dda_line_tool.h"
 #include <algorithm>
+#include <iostream>
 
 
 // Initialize the tool and store a reference of a canvas_store
@@ -31,58 +32,103 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
    *************/
 
 	/*** 	Rückführung auf den Standardfall	***/
-	//int setStandardCase(int& x0, int& y0, int& x1, int& y1)	
-	/* PSEUDO CODE
 
-	if(Winkel <= 45°){
-		if(x0 > x1){
-			swap(q, p);
-			if(y0 > y1){
-				swap(y, -y);
-			}else{
-				//Standardfall
-			}
-		}else{
-			if(y0 > y1){
-				swap(y, -y);
-			}else{
-				//Standardfall
-			}
+
+	//Sonderfall: senkrechte Linie --> schließt (delta y/>0<) aus 
+	if(x0 == x1){
+		for(int yi = y0; yi <= y1; yi++){ 
+			canvas.set_pixel(x0, yi);
 		}
-	}else{
-		if(y0 > y1){
-			swap(p, q);
-			if(x0 < x1){
-				swap(x, y);
-			}else{
-				swap(x, -y);
-			}
-		}else{
-			if(x0 < x1){
-				swap(x, y);
-			}else{
-				swap(x, -y);
-			}
-		}
+		return;
 	}
-
-	*/
-
-
 	//Steigung m
-	float m = (float) abs((y1-y0)/(x1-x0));
+	float m = (float) (y1-y0)/(x1-x0);
+
+	// Koordinatensystem wie in HTML
+	std::cout << "Steigung: " << m << endl;
+	std::cout << "from x0 | from y0  ::  " << x0 << " | " << y0 << endl;
+	std::cout << "to x1 | to y1  ::  " << x1 << " | " << y1 << endl;
 
 	float y = y0;
 
+	//Standardfall
 	for(int xi = x0; xi <= x1; xi++){ 
 		y += 0.5;
-		//rundet y --> round()-Methode existiert nicht -.-
-		//vllt schöner in einer externen round()-Methode
+		//rundet y
 		int yi = (int) y;
-		canvas.set_pixel(xi, /*round (s.o.)*/yi);
-		y = y - 0.5 + m;
+		canvas.set_pixel(xi, yi); //gerundetes yi
+		y = y - 0.5 + m;	
 	}
-	
+
+	/*  UMWANDLUNG IN DEN STANDARDFALL
+	if(m <= 1 && m >= -1){ //Winkel zwischen -45 und 45 Grad
+		if(x0 > x1){ // falsche Pfeilrichtung
+			// p <--> q
+			swap(x0, x1);
+			swap(y0, y1);
+
+			if(y0 > y1){ //zwischen -45 und 0 Grad
+				// y <--> -y
+				y0 = -y0;
+				y1 = -y1;
+			}else{
+				//Standardfall
+				for(int xi = x0; xi <= x1; xi++){ 
+					y += 0.5;
+					//rundet y
+					int yi = (int) y;
+					canvas.set_pixel(xi, yi); ////gerundetes yi
+					y = y - 0.5 + m;	
+				}
+			}
+		}else{ //richtige Pfeilrichtung
+			if(y0 > y1){ //zwischen -45 und 0 Grad
+				// y <--> -y
+				y0 = -y0;
+				y1 = -y1;
+			}else{
+				//Standardfall
+				for(int xi = x0; xi <= x1; xi++){ 
+					y += 0.5;
+					//rundet y
+					int yi = (int) y;
+					canvas.set_pixel(xi, yi); //gerundetes yi
+					y = y - 0.5 + m;	
+				}
+			}
+		}
+	}else{ // Winkel größer als 45 und kleiner als -45 Grad
+		if(y0 > y1){ // falsche Pfeilrichtung
+			// p <--> q
+			swap(x0, x1);
+			swap(y0, y1);
+
+			if(x0 < x1){ // Pfeil zeigt nach rechts oben > / <
+				// x <--> y
+				swap(x0, y0);
+				swap(x1, y1);
+			}else{ // Pfeil zeigt nach links oben > \ <
+				// x <--> -y
+				y0 = -y0;
+				y1 = -y1;
+				swap(x0, y0);
+				swap(x1, y1);
+			}
+		}else{ // richtige Pfeilrichtung
+			if(x0 < x1){ // Pfeil zeigt nach rechts oben > / <
+				// x <--> y
+				swap(x0, y0);
+				swap(x1, y1);
+			}else{ // Pfeil zeigt nach links oben > \ <
+				// x <--> -y
+				y0 = -y0;
+				y1 = -y1;
+				swap(x0, y0);
+				swap(x1, y1);
+			}
+		}
+	}
+	*/
 }
 
 
