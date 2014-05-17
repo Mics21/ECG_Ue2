@@ -45,12 +45,13 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 	float m = (float) (y1-y0)/(x1-x0);
 
 	// Koordinatensystem wie in HTML
-	std::cout << "Steigung: " << m << endl;
-	std::cout << "from x0 | from y0  ::  " << x0 << " | " << y0 << endl;
-	std::cout << "to x1 | to y1  ::  " << x1 << " | " << y1 << endl;
-
-	float y = y0;
-
+	/*cout << endl;
+	cout << "Steigung: " << m << endl;
+	cout << "from x0 | from y0  ::  " << x0 << " | " << y0 << endl;
+	cout << "to x1 | to y1  ::  " << x1 << " | " << y1 << endl;
+*/
+	float y;
+/*
 	//Standardfall
 	for(int xi = x0; xi <= x1; xi++){ 
 		y += 0.5;
@@ -59,76 +60,117 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 		canvas.set_pixel(xi, yi); //gerundetes yi
 		y = y - 0.5 + m;	
 	}
-
-	/*  UMWANDLUNG IN DEN STANDARDFALL
+*/
+	  //UMWANDLUNG IN DEN STANDARDFALL
 	if(m <= 1 && m >= -1){ //Winkel zwischen -45 und 45 Grad
 		if(x0 > x1){ // falsche Pfeilrichtung
 			// p <--> q
 			swap(x0, x1);
 			swap(y0, y1);
 
-			if(y0 > y1){ //zwischen -45 und 0 Grad
+			if(y0 > y1){ //zwischen -45 und 0 Grad   
 				// y <--> -y
 				y0 = -y0;
 				y1 = -y1;
+				y = y0;
+				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
+				for(int xi = x0; xi <= x1; xi++){ 
+					int yi = floor(y + 0.5);
+					canvas.set_pixel(xi, -yi); //gerundetes yi
+					y = y + m;
+				}
 			}else{
 				//Standardfall
+				y = y0;
 				for(int xi = x0; xi <= x1; xi++){ 
-					y += 0.5;
-					//rundet y
-					int yi = (int) y;
-					canvas.set_pixel(xi, yi); ////gerundetes yi
-					y = y - 0.5 + m;	
+					int yi = floor(y + 0.5);
+					canvas.set_pixel(xi, yi); //gerundetes yi
+					y = y + m;
 				}
 			}
 		}else{ //richtige Pfeilrichtung
-			if(y0 > y1){ //zwischen -45 und 0 Grad
+			if(y0 < y1){ //zwischen -45 und 0 Grad	
 				// y <--> -y
 				y0 = -y0;
 				y1 = -y1;
+				y = y0;
+				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
+				for(int xi = x0; xi <= x1; xi++){ 
+					int yi = floor(y + 0.5);
+					canvas.set_pixel(xi, -yi); //gerundetes yi
+					y = y + m;
+				}
 			}else{
 				//Standardfall
+				y = y0;
 				for(int xi = x0; xi <= x1; xi++){ 
-					y += 0.5;
-					//rundet y
-					int yi = (int) y;
+					int yi = floor(y + 0.5);
 					canvas.set_pixel(xi, yi); //gerundetes yi
-					y = y - 0.5 + m;	
+					y = y + m;	
 				}
 			}
 		}
 	}else{ // Winkel größer als 45 und kleiner als -45 Grad
-		if(y0 > y1){ // falsche Pfeilrichtung
+		if(x0 > x1){ // falsche Pfeilrichtung
 			// p <--> q
 			swap(x0, x1);
 			swap(y0, y1);
 
-			if(x0 < x1){ // Pfeil zeigt nach rechts oben > / <
+			if(y0 < y1){ // Pfeil zeigt nach rechts oben > / <
 				// x <--> y
 				swap(x0, y0);
 				swap(x1, y1);
+				y = y0;
+				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
+				for(int xi = x0; xi <= x1; xi++){ 
+					int yi = floor(y + 0.5);
+					canvas.set_pixel(yi, xi); //gerundetes yi
+					y = y + m;
+				}
 			}else{ // Pfeil zeigt nach links oben > \ <
 				// x <--> -y
 				y0 = -y0;
 				y1 = -y1;
 				swap(x0, y0);
 				swap(x1, y1);
+				y = y0;
+				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
+				for(int xi = x0; xi <= x1; xi++){ 
+					int yi = floor(y + 0.5);
+					canvas.set_pixel(yi, -xi); //gerundetes yi
+					y = y + m;
+				}
+
+
 			}
 		}else{ // richtige Pfeilrichtung
-			if(x0 < x1){ // Pfeil zeigt nach rechts oben > / <
+			if(y0 < y1){ // Pfeil zeigt nach rechts oben > / <
 				// x <--> y
 				swap(x0, y0);
 				swap(x1, y1);
+				y = y0;
+				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
+				for(int xi = x0; xi <= x1; xi++){ 
+					int yi = floor(y + 0.5);
+					canvas.set_pixel(yi, xi); //gerundetes yi
+					y = y + m;
+				}
 			}else{ // Pfeil zeigt nach links oben > \ <
 				// x <--> -y
 				y0 = -y0;
 				y1 = -y1;
 				swap(x0, y0);
 				swap(x1, y1);
+				y = y0;
+				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
+				for(int xi = x0; xi <= x1; xi++){ 
+					int yi = floor(y + 0.5);
+					canvas.set_pixel(yi, -xi); //gerundetes yi
+					y = y + m;
+				}
 			}
 		}
 	}
-	*/
 }
 
 
