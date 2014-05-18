@@ -19,6 +19,25 @@ void rectangle_tool::draw(int x0, int y0, int x1, int y1)
     Zusatzaufgabe:   Implementieren Sie die Rasterisierung eines
 	                 Rechtecks, das von (x0, y0) nach (x1, y1) geht.
 	*************/
+	
+	if(x0 > x1){
+		swap(x0, x1);
+	}
+	if(y0 > y1){
+		swap(y0, y1);		
+	}
+	
+	//vertikal
+		for(int v = y0; v <= y1; v++){
+			canvas.set_pixel(x0, v);
+			canvas.set_pixel(x1, v);
+		}
+		//horizontal
+		for(int h = x0; h <= x1; h++){
+			canvas.set_pixel(h, y0);
+			canvas.set_pixel(h, y1);
+		}
+
 }
 
 
