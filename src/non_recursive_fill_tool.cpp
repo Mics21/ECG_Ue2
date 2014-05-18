@@ -30,8 +30,8 @@ void non_recursive_fill_tool::draw(int x, int y)
 				   think about when to set the pixel (at the beginning of the loop or after 
 				   the stack was updated with neighbours). Use "canvas.set_pixel" to set
 				   a pixel and "canvas.get_pixel" to read the state of a pixel.
-    Aufgabe 3.2.2. Implementieren Sie einen Füllalgorithmus ohne Rekursion zu verwenden.
-	               Nutzen Sie stattdessen einen Stack. Der vorgegebene Quelltext unten fuegt
+	Aufgabe 3.2.2. Implementieren Sie einen Füllalgorithmus ohne Rekursion zu verwenden.
+				   Nutzen Sie stattdessen einen Stack. Der vorgegebene Quelltext unten fuegt
 				   das erste Element in den Stack ein und startet eine Schleife, die das 
 				   vorderste Element aus dem Stack liest und es anschließend entfernt.
 				   Ihre Aufgabe ist es die Funktionalitaet im Inneren der Schleife zu
@@ -60,6 +60,33 @@ void non_recursive_fill_tool::draw(int x, int y)
 		int cur_x = stack.front().x; 
 		int cur_y = stack.front().y;
 		// Complete the algorithm here
+
+		if(!canvas.get_pixel(cur_x - 1, cur_y)){
+			canvas.set_pixel(cur_x - 1, cur_y);
+			p.x = cur_x - 1; 
+			p.y = cur_y;
+			stack.push_back(p);
+		}
+		if(!canvas.get_pixel(cur_x + 1, cur_y)){
+			canvas.set_pixel(cur_x + 1, cur_y);
+			p.x = cur_x + 1; 
+			p.y = cur_y;
+			stack.push_back(p);
+		}
+		if(!canvas.get_pixel(cur_x, cur_y - 1)){
+			canvas.set_pixel(cur_x, cur_y - 1);
+			p.x = cur_x; 
+			p.y = cur_y - 1;
+			stack.push_back(p);
+		}
+		if(!canvas.get_pixel(cur_x, cur_y + 1)){
+			canvas.set_pixel(cur_x, cur_y + 1);
+			p.x = cur_x; 
+			p.y = cur_y + 1;
+			stack.push_back(p);
+		}
+
+
 
 		stack.pop_front(); 
 	}

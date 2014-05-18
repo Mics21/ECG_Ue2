@@ -15,19 +15,29 @@ void recursive_fill_tool::draw(int x, int y)
 {
 	/************
 	Task 3.2.1.    Implement the recursive fill algorithm by checking the
-	               state of the neighbouring pixels (via "canvas.get_pixel(x, y)"
+				   state of the neighbouring pixels (via "canvas.get_pixel(x, y)"
 				   where "x" and "y" defines the position to check) and recursively
 				   call "draw" if the pixel is not set. A pixel can be set with
 				   "canvas.set_pixel(x, y)".
 				   This method will make the application crash if the area which shall 
 				   be filled is too big.
-    Aufgabe 3.2.1. Implementieren Sie den rekursiven Füllalgorithmus, indem Sie den
-	               Zustand der Nachbarpixel überprüfen (mittels "canvas.get_pixel(x, y)"
+	Aufgabe 3.2.1. Implementieren Sie den rekursiven Füllalgorithmus, indem Sie den
+				   Zustand der Nachbarpixel überprüfen (mittels "canvas.get_pixel(x, y)"
 				   wobei "x" und "y" die Position des zu überprüfenden Pixels definieren)
 				   und rufen Sie rekursiv die "draw"-Methode auf, wenn die Pixel nicht 
 				   gesetzt sind. Ein Pixel kann durch "canvas.set_pixel(x, y)" gesetzt
 				   werden.
 	*************/
+	if(canvas.get_pixel(x, y) == false){
+		canvas.set_pixel(x, y);
+	}else{
+		return;
+	}
+	draw(x - 1, y);
+	draw(x + 1, y);
+	draw(x, y - 1);
+	draw(x, y + 1);
+
 }
 
 
