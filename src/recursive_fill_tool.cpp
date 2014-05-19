@@ -8,6 +8,22 @@ recursive_fill_tool::recursive_fill_tool(canvas_store& canvas): abstract_tool(ca
 	is_draggable = false;
 }
 
+// Vector for max recursion depth
+vector<int> depth;
+
+
+// Function to get maximum recursion depth
+int recursive_fill_tool::maxrec(){
+	int size = depth.size();
+	int max = 0;
+	for(int i = 0; i < size; i++){
+		if(depth.back() > max) max = depth.back();
+			depth.pop_back();
+	}
+		return max;
+	
+}
+
 
 
 // Fill the shape that contains the point (x, y)
@@ -28,16 +44,40 @@ void recursive_fill_tool::draw(int x, int y)
 				   gesetzt sind. Ein Pixel kann durch "canvas.set_pixel(x, y)" gesetzt
 				   werden.
 	*************/
-	if(canvas.get_pixel(x, y) == false){
-		canvas.set_pixel(x, y);
-	}else{
-		return;
-	}
-	draw(x - 1, y);
-	draw(x + 1, y);
-	draw(x, y - 1);
-	draw(x, y + 1);
+	int z = 0;
+	depth.push_back(z);
 
+	if(canvas.get_pixel(x, y)){
+		return;
+		
+	}else{
+		canvas.set_pixel(x, y);
+	}
+	draw(x - 1, y, z);
+	draw(x + 1, y, z);
+	draw(x, y - 1, z);
+	draw(x, y + 1, z);
+
+	cout << "Maximale Tiefe der Rekursion: " << maxrec() << endl;
+ 
+}
+
+
+// Fill the shape that contains the point (x, y)
+void recursive_fill_tool::draw(int x, int y, int z)
+{	
+	z++;
+	depth.push_back(z);
+	if(canvas.get_pixel(x, y)){
+		return;
+	}else{
+		canvas.set_pixel(x, y);
+	}
+	draw(x - 1, y, z);
+	draw(x + 1, y, z);
+	draw(x, y - 1, z);
+	draw(x, y + 1, z);
+ 
 }
 
 
