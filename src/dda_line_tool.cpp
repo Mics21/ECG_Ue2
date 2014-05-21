@@ -44,24 +44,10 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 	//Steigung m
 	float m = (float) (y1-y0)/(x1-x0);
 
-	// Koordinatensystem wie in HTML
-	/*cout << endl;
-	cout << "Steigung: " << m << endl;
-	cout << "from x0 | from y0  ::  " << x0 << " | " << y0 << endl;
-	cout << "to x1 | to y1  ::  " << x1 << " | " << y1 << endl;
-*/
+
 	float y;
-/*
-	//Standardfall
-	for(int xi = x0; xi <= x1; xi++){ 
-		y += 0.5;
-		//rundet y
-		int yi = (int) y;
-		canvas.set_pixel(xi, yi); //gerundetes yi
-		y = y - 0.5 + m;	
-	}
-*/
-	  //UMWANDLUNG IN DEN STANDARDFALL
+
+	  
 	if(m <= 1 && m >= -1){ //Winkel zwischen -45 und 45 Grad
 		if(x0 > x1){ // falsche Pfeilrichtung
 			// p <--> q
@@ -76,7 +62,7 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
 				for(int xi = x0; xi <= x1; xi++){ 
 					int yi = floor(y + 0.5);
-					canvas.set_pixel(xi, -yi); //gerundetes yi
+					canvas.set_pixel(xi, -yi);
 					y = y + m;
 				}
 			}else{
@@ -84,7 +70,7 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 				y = y0;
 				for(int xi = x0; xi <= x1; xi++){ 
 					int yi = floor(y + 0.5);
-					canvas.set_pixel(xi, yi); //gerundetes yi
+					canvas.set_pixel(xi, yi); 
 					y = y + m;
 				}
 			}
@@ -97,15 +83,14 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
 				for(int xi = x0; xi <= x1; xi++){ 
 					int yi = floor(y + 0.5);
-					canvas.set_pixel(xi, -yi); //gerundetes yi
+					canvas.set_pixel(xi, -yi); 
 					y = y + m;
 				}
 			}else{
-				//Standardfall
 				y = y0;
 				for(int xi = x0; xi <= x1; xi++){ 
 					int yi = floor(y + 0.5);
-					canvas.set_pixel(xi, yi); //gerundetes yi
+					canvas.set_pixel(xi, yi); 
 					y = y + m;	
 				}
 			}
@@ -116,7 +101,7 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 			swap(x0, x1);
 			swap(y0, y1);
 
-			if(y0 < y1){ // Pfeil zeigt nach rechts oben > / <
+			if(y0 < y1){ 
 				// x <--> y
 				swap(x0, y0);
 				swap(x1, y1);
@@ -124,10 +109,10 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
 				for(int xi = x0; xi <= x1; xi++){ 
 					int yi = floor(y + 0.5);
-					canvas.set_pixel(yi, xi); //gerundetes yi
+					canvas.set_pixel(yi, xi); 
 					y = y + m;
 				}
-			}else{ // Pfeil zeigt nach links oben > \ <
+			}else{ 
 				// x <--> -y
 				y0 = -y0;
 				y1 = -y1;
@@ -137,7 +122,7 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
 				for(int xi = x0; xi <= x1; xi++){ 
 					int yi = floor(y + 0.5);
-					canvas.set_pixel(yi, -xi); //gerundetes yi
+					canvas.set_pixel(yi, -xi); 
 					y = y + m;
 				}
 
@@ -155,7 +140,7 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 					canvas.set_pixel(yi, xi); //gerundetes yi
 					y = y + m;
 				}
-			}else{ // Pfeil zeigt nach links oben > \ <
+			}else{
 				// x <--> -y
 				y0 = -y0;
 				y1 = -y1;
@@ -165,7 +150,7 @@ void dda_line_tool::draw(int x0, int y0, int x1, int y1)
 				m = (float) (y1-y0)/(x1-x0);		// Neuberechnung des Anstiegs notwendig!!!!!
 				for(int xi = x0; xi <= x1; xi++){ 
 					int yi = floor(y + 0.5);
-					canvas.set_pixel(yi, -xi); //gerundetes yi
+					canvas.set_pixel(yi, -xi);
 					y = y + m;
 				}
 			}
